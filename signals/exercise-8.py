@@ -1,10 +1,6 @@
 import numpy as np
 from vispy import app
 from vispy import gloo
-from vispy.gloo import gl
-
-app.use('glfw')
-
 
 vertex = """
 attribute float x;
@@ -37,7 +33,6 @@ class Window(app.Canvas):
     def __init__(self, n=50):
         app.Canvas.__init__(self, size=(1000,500))
         self.program = gloo.Program(vertex, fragment)
-        gl.glClearColor(1,1,1,1)
         self.data = np.zeros((100,n), [('x', np.float32, 1),
                                        ('y', np.float32, 1),
                                        ('a', np.float32, 1),
@@ -58,11 +53,11 @@ class Window(app.Canvas):
         self.index = 0
 
     def on_resize(self, event):
-        gl.glViewport(0, 0, event.size[0], event.size[1])
+        gloo.set_viewport(0, 0, event.size[0], event.size[1])
 
     def on_draw(self, event):
-        gl.glClear(gl.GL_COLOR_BUFFER_BIT)
-        self.program.draw(gl.GL_LINE_STRIP)
+        gloo.clear((1,1,1,1))
+        self.program.draw('line_strip')
 
     def on_timer(self, event):
         n = self.data.shape[-1]

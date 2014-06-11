@@ -3,7 +3,7 @@ from vispy import app
 from vispy import gloo
 from vispy.gloo import gl
 
-app.use('glfw')
+
 
 
 vertex = """

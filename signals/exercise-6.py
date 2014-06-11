@@ -1,30 +1,20 @@
 import numpy as np
 from vispy import app
 from vispy import gloo
-from vispy.gloo import gl
-
-app.use('glfw')
-
 
 vertex = """
 attribute float x;
 attribute float y;
 attribute float i;
-varying float v_i;
 void main (void)
 {
-    v_i = i;
     gl_Position = vec4(x, 1.0 - 1.0/10.0- i/5.0 +y, 0.0, 1.0);
 }
 """
 
 fragment = """
-varying float v_i;
 void main()
 {
-    if (fract(v_i) > 0.0)
-        discard;
-
     gl_FragColor = vec4(0.0,0.0,0.0,1.0);
 }
 """
@@ -33,7 +23,6 @@ class Window(app.Canvas):
     def __init__(self, n=50):
         app.Canvas.__init__(self)
         self.program = gloo.Program(vertex, fragment)
-        gl.glClearColor(1,1,1,1)
         self.data = np.zeros((10,n), [('x', np.float32, 1),
                                       ('y', np.float32, 1),
                                       ('i', np.float32, 1)])
@@ -45,12 +34,14 @@ class Window(app.Canvas):
         self.vdata = gloo.VertexBuffer(self.data)
         self.program.bind(self.vdata)
 
+
     def on_resize(self, event):
-        gl.glViewport(0, 0, event.size[0], event.size[1])
+        gloo.set_viewport(0, 0, event.size[0], event.size[1])
 
     def on_draw(self, event):
-        gl.glClear(gl.GL_COLOR_BUFFER_BIT)
-        self.program.draw(gl.GL_LINE_STRIP)
+        gloo.clear((1,1,1,1))
+        self.program.draw('line_strip')
+
 
 
 window = Window(n=256)

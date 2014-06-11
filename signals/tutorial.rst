@@ -16,4 +16,3 @@
 
 8. Animate 100 signals of 500 points each using techniques from 4.
 
-9. Read data from the given hdf5 file and display them (100 signals of 1000 points at a time).
