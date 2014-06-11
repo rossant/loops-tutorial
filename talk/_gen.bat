@@ -1,0 +1,1 @@
+ipython nbconvert talk.ipynb --to slides --post serve --config slides_config.py
