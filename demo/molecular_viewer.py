@@ -26,9 +26,6 @@ varying vec3  v_color;
 varying vec4  v_eye_position;
 varying float v_radius;
 varying vec3  v_light_direction;
-
-varying float fog;
-
 void main (void) {
     v_radius = a_radius;
     v_color = a_color;
@@ -43,12 +40,6 @@ void main (void) {
     //  ... resizing-point-sprites-based-on-distance-from-the-camera
     vec4  proj_corner = u_projection * vec4(a_radius, a_radius, v_eye_position.z, v_eye_position.w);  // # noqa
     gl_PointSize = 512.0 * proj_corner.x / proj_corner.w;
-    
-    float end_fog = 50.0;
-    float fog_coord = abs(gl_Position.z);
-    fog_coord = clamp(fog_coord, 0.0, end_fog);
-    fog = 1.5*exp(-.001*fog_coord*fog_coord);
-    fog = clamp(fog, 0.0, 1.0);
 }
 """
 
@@ -63,7 +54,6 @@ varying vec3  v_color;
 varying vec4  v_eye_position;
 varying float v_radius;
 varying vec3  v_light_direction;
-varying float fog; 
 
 void main()
 {
@@ -95,9 +85,6 @@ void main()
     vec3 v_light = vec3(1., 1., 1.);
     gl_FragColor.rgb = (.15*v_color + .55*diffuse * v_color
                         + .35*specular * v_light);
-                        
-    gl_FragColor = mix(vec4(0., 0., 0., 1.), gl_FragColor, fog);
-                        
                         
 }
 """
